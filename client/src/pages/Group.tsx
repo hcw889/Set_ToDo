@@ -1,4 +1,5 @@
 import { Avatar } from "../components/Avatar";
+import { GroupManager } from "../Group/Group_List/GroupManager";
 import { ProgressGrid, GridLegend } from "../components/ProgressGrid";
 import {
   computeMembers,
@@ -18,6 +19,13 @@ export function Group() {
 
   return (
     <div className="space-y-4">
+      {/* 내 파트: 모임/인원 추가 + 투두리스트 작성란 */}
+      <GroupManager />
+
+      <div className="border-t border-slate-200 pt-4">
+        <h3 className="text-base font-bold">친구들 30일 진행 (데모)</h3>
+      </div>
+
       {/* 공동 벌금 풀 */}
       <div className="rounded-2xl bg-gradient-to-br from-violet-200 to-indigo-200 p-5 text-slate-800 shadow-sm">
         <p className="text-sm text-slate-600">모임통장 (모인 벌금)</p>
