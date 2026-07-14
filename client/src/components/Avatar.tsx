@@ -13,7 +13,7 @@ export function Avatar({
   const letter = user.name.trim().charAt(0) || "?";
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-full font-bold text-white ${
+      className={`flex shrink-0 items-center justify-center rounded-full font-bold text-slate-800 ${
         ring ? "ring-2 ring-white" : ""
       }`}
       style={{
