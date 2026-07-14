@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useGroups, MIN_MEMBERS, MAX_MEMBERS, type LocalGroup } from "../../lib/groupStore";
-import { TodoSection } from "../ToDo_List/TodoSection";
 
-// 내 파트 컨테이너
-// - Group_List: 모임(그룹) 추가·수정, 인원 추가
-// - ToDo_List:  투두리스트 작성란(추가)
+// 그룹 탭 전용: 모임(그룹) 추가·수정, 인원 추가만 담당.
+// 투두 작성/수정은 홈 → 투두 페이지(ToDo_List)로 분리됨.
 export function GroupManager() {
   const store = useGroups();
   const { groups } = store;
@@ -31,13 +29,7 @@ export function GroupManager() {
         }}
       />
 
-      {selected && (
-        <>
-          <MemberSection group={selected} store={store} />
-          {/* 투두 추가는 ToDo_List 폴더 담당 */}
-          <TodoSection group={selected} store={store} />
-        </>
-      )}
+      {selected && <MemberSection group={selected} store={store} />}
     </section>
   );
 }
