@@ -4,6 +4,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Group } from "./pages/Group";
 import { Settlement } from "./pages/Settlement";
 import { Onboarding } from "./pages/Onboarding";
+import { TodoPage } from "./Group/ToDo_List/TodoPage";
 import { DemoProvider, useDemo } from "./state/DemoContext";
 
 function FullScreen({ children }: { children: React.ReactNode }) {
@@ -36,6 +37,8 @@ function Gate() {
 
   return (
     <Routes>
+      {/* 투두 편집은 탭바 없는 전체 화면 */}
+      <Route path="todos" element={<TodoPage />} />
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="group" element={<Group />} />

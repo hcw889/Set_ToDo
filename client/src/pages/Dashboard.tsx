@@ -84,11 +84,19 @@ export function Dashboard() {
           <h3 className="font-bold">
             {ended ? "미션 (종료됨)" : `오늘의 미션 · ${currentDay}일차`}
           </h3>
-          {!ended && (
-            <span className="text-xs text-slate-500">
-              {doneToday}/{myMissions.length} 완료
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {!ended && (
+              <span className="text-xs text-slate-500">
+                {doneToday}/{myMissions.length} 완료
+              </span>
+            )}
+            <Link
+              to="/todos"
+              className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-600"
+            >
+              ＋ 투두 편집
+            </Link>
+          </div>
         </div>
 
         {ended ? (
