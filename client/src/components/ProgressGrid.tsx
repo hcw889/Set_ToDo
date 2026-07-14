@@ -5,7 +5,7 @@ const STATUS_STYLE: Record<DayStatus, string> = {
   done: "bg-emerald-500",
   partial: "bg-amber-400",
   missed: "bg-rose-400",
-  today: "bg-indigo-500 ring-2 ring-indigo-300 ring-offset-1",
+  today: "bg-violet-400 ring-2 ring-violet-200 ring-offset-1",
   future: "bg-slate-200",
 };
 

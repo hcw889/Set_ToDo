@@ -56,7 +56,7 @@ export function Settlement() {
               onClick={() => setRule(r)}
               className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
                 rule === r
-                  ? "bg-indigo-600 text-white"
+                  ? "bg-violet-300 text-slate-800"
                   : "bg-slate-100 text-slate-600"
               }`}
             >
@@ -68,8 +68,8 @@ export function Settlement() {
       </div>
 
       {/* 풀 */}
-      <div className="rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-white shadow-sm">
-        <p className="text-sm text-emerald-50">나눠 가질 모임통장</p>
+      <div className="rounded-2xl bg-gradient-to-br from-teal-100 to-emerald-100 p-5 text-slate-800 shadow-sm">
+        <p className="text-sm text-slate-600">나눠 가질 모임통장</p>
         <p className="mt-1 text-3xl font-extrabold">{formatPoints(pool)}</p>
       </div>
 
@@ -82,7 +82,7 @@ export function Settlement() {
             <div
               key={p.user.id}
               className={`flex items-center gap-3 rounded-2xl p-4 shadow-sm ${
-                isMe ? "bg-indigo-50 ring-1 ring-indigo-200" : "bg-white"
+                isMe ? "bg-violet-50 ring-1 ring-violet-200" : "bg-white"
               }`}
             >
               <Avatar user={p.user} size={40} />
@@ -90,7 +90,7 @@ export function Settlement() {
                 <p className="font-semibold">
                   {p.user.name}
                   {isMe && (
-                    <span className="ml-1 text-xs font-bold text-indigo-500">
+                    <span className="ml-1 text-xs font-bold text-violet-500">
                       (나)
                     </span>
                   )}

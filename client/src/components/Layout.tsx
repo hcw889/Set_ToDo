@@ -16,15 +16,15 @@ export function Layout() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-slate-50 shadow-xl sm:my-4 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl sm:overflow-hidden">
       {/* 헤더 */}
-      <header className="bg-indigo-600 px-4 pb-3 pt-4 text-white">
+      <header className="bg-violet-100 px-4 pb-3 pt-4 text-slate-800">
         <div className="flex items-center justify-between">
           <div className="min-w-0">
-            <p className="text-xs text-indigo-200">셋투두 · 친구와 함께</p>
+            <p className="text-xs text-slate-500">셋투두 · 친구와 함께</p>
             <h1 className="truncate text-lg font-bold">
               {group?.name ?? "모임 불러오는 중…"}
             </h1>
           </div>
-          <span className="shrink-0 rounded-full bg-white/15 px-3 py-1 text-sm font-semibold">
+          <span className="shrink-0 rounded-full bg-white/70 px-3 py-1 text-sm font-semibold text-slate-700">
             {ended ? "종료 🎉" : `Day ${currentDay}/${durationDays}`}
           </span>
         </div>
@@ -46,7 +46,7 @@ export function Layout() {
             end={t.end}
             className={({ isActive }) =>
               `flex flex-col items-center gap-0.5 py-2.5 text-xs font-medium transition ${
-                isActive ? "text-indigo-600" : "text-slate-400"
+                isActive ? "text-violet-500" : "text-slate-400"
               }`
             }
           >
