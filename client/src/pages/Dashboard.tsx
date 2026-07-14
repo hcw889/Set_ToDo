@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { MissionCard } from "../components/MissionCard";
 import { ProgressGrid, GridLegend } from "../components/ProgressGrid";
 import {
   completionRate,
@@ -7,6 +6,9 @@ import {
   penaltyForMember,
 } from "../lib/points";
 import { useDemo } from "../state/DemoContext";
+import { VerificationProvider } from "../features/setlog/VerificationContext";
+import { SetlogOverlay } from "../features/setlog/SetlogOverlay";
+import { MissionRow } from "../features/setlog/MissionRow";
 
 export function Dashboard() {
   const {
@@ -17,7 +19,6 @@ export function Dashboard() {
     myCompletions,
     meRecord,
     isDone,
-    setDone,
   } = useDemo();
 
   if (!currentUser) return null;
@@ -34,6 +35,7 @@ export function Dashboard() {
   const allDone = myMissions.length > 0 && doneToday === myMissions.length;
 
   return (
+    <VerificationProvider>
     <div className="space-y-4">
       <div>
         <p className="text-sm text-slate-500">안녕하세요,</p>
@@ -99,12 +101,7 @@ export function Dashboard() {
         ) : (
           <div className="space-y-2">
             {myMissions.map((m) => (
-              <MissionCard
-                key={m.id}
-                mission={m}
-                done={isDone(m.id, currentDay)}
-                onToggle={() => setDone(m.id, currentDay, !isDone(m.id, currentDay))}
-              />
+              <MissionRow key={m.id} mission={m} />
             ))}
           </div>
         )}
@@ -119,5 +116,7 @@ export function Dashboard() {
         )}
       </div>
     </div>
+    <SetlogOverlay />
+    </VerificationProvider>
   );
 }
