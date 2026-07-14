@@ -4,7 +4,7 @@ import { useDemo } from "../state/DemoContext";
 // 단일 기기 데모용 시간여행 도구. 실서비스에는 없는 데모 전용 UI.
 export function DemoControls() {
   const { advanceDay, seedSample, jumpToEnd, resetProgress, logout } = useDemo();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <div className="border-b border-slate-200 bg-amber-50">
