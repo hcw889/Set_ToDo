@@ -92,7 +92,7 @@ export function Dashboard() {
         </div>
 
         {ended ? (
-          <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-800">
+          <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-800">
             30일 챌린지가 끝났어요. 🎉{" "}
             <Link to="/settlement" className="font-bold underline">
               정산 결과 보기
