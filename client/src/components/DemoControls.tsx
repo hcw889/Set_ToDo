@@ -3,7 +3,15 @@ import { useDemo } from "../state/DemoContext";
 
 // 단일 기기 데모용 시간여행 도구. 실서비스에는 없는 데모 전용 UI.
 export function DemoControls() {
-  const { advanceDay, seedSample, jumpToEnd, resetProgress, logout } = useDemo();
+  const {
+    advanceDay,
+    seedSample,
+    jumpToEnd,
+    resetProgress,
+    resetTodayCheckin,
+    checkedInToday,
+    logout,
+  } = useDemo();
   const [open, setOpen] = useState(true);
 
   return (
@@ -19,6 +27,9 @@ export function DemoControls() {
       {open && (
         <div className="flex flex-wrap gap-2 px-4 pb-2">
           <DemoButton onClick={advanceDay}>다음 날로 ▶</DemoButton>
+          <DemoButton onClick={resetTodayCheckin} disabled={!checkedInToday}>
+            출석 다시하기 ↺
+          </DemoButton>
           <DemoButton onClick={seedSample}>샘플 기록 채우기</DemoButton>
           <DemoButton onClick={jumpToEnd}>30일 종료 시뮬레이션</DemoButton>
           <DemoButton onClick={resetProgress}>진행 초기화</DemoButton>
@@ -35,16 +46,19 @@ function DemoButton({
   children,
   onClick,
   danger,
+  disabled,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   danger?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-xs font-medium transition active:scale-95 ${
+      disabled={disabled}
+      className={`rounded-full border px-3 py-1 text-xs font-medium transition active:scale-95 disabled:opacity-40 ${
         danger
           ? "border-rose-300 bg-white text-rose-600"
           : "border-amber-300 bg-white text-amber-800"
