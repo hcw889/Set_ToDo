@@ -4,6 +4,7 @@
 import { useCallback } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { colorForName } from "./auth";
+import type { MemberRecord } from "../types";
 
 // 규칙: 그룹 인원과 투두 항목은 최소 3개, 최대 5개
 export const MIN_MEMBERS = 3;
@@ -175,4 +176,22 @@ export function useGroups(): GroupStore {
   );
 
   return { groups, addGroup, removeGroup, addMember, removeMember, addTodo, removeTodo };
+}
+
+// 내 모임(로컬)을 "멤버 진행 화면"이 쓰는 MemberRecord 형태로 변환.
+// 각 멤버의 미션 = 그 멤버에게 배정된 투두. 완료 기록은 아직 없음(빈 값)으로 시작.
+// → 인원/투두를 추가하면 진행 화면에도 같은 이름으로 즉시 반영된다.
+export function groupToMemberRecords(group: LocalGroup): MemberRecord[] {
+  return group.members.map((m) => ({
+    user: { id: m.id, name: m.name, avatarColor: m.color },
+    missions: group.todos
+      .filter((t) => t.assignedTo === m.id)
+      .map((t) => ({
+        id: t.id,
+        title: t.title,
+        penaltyPoints: t.penaltyPoints,
+        assignedBy: "",
+      })),
+    completions: {},
+  }));
 }

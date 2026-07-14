@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { useGroups, MIN_MEMBERS, MAX_MEMBERS, type LocalGroup } from "../../lib/groupStore";
+import {
+  MIN_MEMBERS,
+  MAX_MEMBERS,
+  type LocalGroup,
+  type GroupStore,
+} from "../../lib/groupStore";
 
 // 그룹 탭 전용: 모임(그룹) 추가·수정, 인원 추가만 담당.
-// 투두 작성/수정은 홈 → 투두 페이지(ToDo_List)로 분리됨.
-export function GroupManager() {
-  const store = useGroups();
-  const { groups } = store;
-
-  // 현재 선택된 모임 (없으면 첫 번째)
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+// 선택된 모임은 부모(Group 페이지)와 공유 → 아래 진행 화면과 연동됨.
+export function GroupManager({
+  store,
+  groups,
+  selectedId,
+  onSelect,
+}: {
+  store: GroupStore;
+  groups: LocalGroup[];
+  selectedId: string | null;
+  onSelect: (id: string | null) => void;
+}) {
   const selected = groups.find((g) => g.id === selectedId) ?? groups[0] ?? null;
 
   return (
@@ -18,14 +28,14 @@ export function GroupManager() {
       <GroupTabs
         groups={groups}
         selectedId={selected?.id ?? null}
-        onSelect={setSelectedId}
+        onSelect={onSelect}
         onAdd={(name) => {
           const g = store.addGroup(name);
-          if (g) setSelectedId(g.id);
+          if (g) onSelect(g.id);
         }}
         onRemove={(id) => {
           store.removeGroup(id);
-          setSelectedId(null);
+          onSelect(null);
         }}
       />
 
@@ -121,7 +131,7 @@ function MemberSection({
   store,
 }: {
   group: LocalGroup;
-  store: ReturnType<typeof useGroups>;
+  store: GroupStore;
 }) {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);

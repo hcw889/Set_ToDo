@@ -13,6 +13,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import type { Group, MemberRecord, Mission, User } from "../types";
 
 const DEFAULT_DURATION = 30;
+const genId = () => "m-" + Math.random().toString(36).slice(2, 9);
 
 interface DemoContextValue {
   // 로딩/서버 상태
@@ -24,7 +25,8 @@ interface DemoContextValue {
   // 현재 사용자 (localStorage)
   currentUser: User | null;
   currentDay: number;
-  myMissions: Mission[];
+  myMissions: Mission[]; // 서버 기본 미션 + 내가 추가한 미션(병합)
+  extraMissions: Mission[]; // 홈/투두 페이지에서 직접 추가한 미션 (삭제 가능)
   myCompletions: Record<string, number[]>;
 
   // 파생: 나 + 친구들
@@ -34,6 +36,8 @@ interface DemoContextValue {
   // 액션
   login: (name: string) => void;
   logout: () => void;
+  addMission: (input: { title: string; penaltyPoints: number }) => void;
+  removeMission: (id: string) => void;
   isDone: (missionId: string, day: number) => boolean;
   setDone: (missionId: string, day: number, done: boolean) => void;
   advanceDay: () => void;
@@ -55,7 +59,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   >("settodo:completions", {});
 
   const [group, setGroup] = useState<Group | null>(null);
-  const [myMissions, setMyMissions] = useState<Mission[]>([]);
+  const [serverMissions, setServerMissions] = useState<Mission[]>([]);
+  const [extraMissions, setExtraMissions] = useLocalStorage<Mission[]>(
+    "settodo:extramissions",
+    []
+  );
   const [durationDays, setDurationDays] = useState<number>(DEFAULT_DURATION);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +79,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         ]);
         if (!alive) return;
         setGroup(g);
-        setMyMissions(m.missions);
+        setServerMissions(m.missions);
         setDurationDays(g.durationDays || m.durationDays || DEFAULT_DURATION);
       } catch (e) {
         if (!alive) return;
@@ -95,6 +103,42 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setCurrentDay(1);
     setMyCompletions({});
   }, [setCurrentUser, setCurrentDay, setMyCompletions]);
+
+  // 홈의 "오늘의 미션" = 서버 기본 미션 + 내가 추가한 미션 (병합)
+  const myMissions = useMemo<Mission[]>(
+    () => [...serverMissions, ...extraMissions],
+    [serverMissions, extraMissions]
+  );
+
+  // 투두(미션) 추가 → 홈 오늘의 미션에 즉시 반영
+  const addMission = useCallback(
+    (input: { title: string; penaltyPoints: number }) => {
+      const title = input.title.trim();
+      if (!title) return;
+      const mission: Mission = {
+        id: genId(),
+        title,
+        penaltyPoints: Math.max(0, Math.round(input.penaltyPoints) || 0),
+        assignedBy: currentUser?.name ?? "나",
+      };
+      setExtraMissions((prev) => [...prev, mission]);
+    },
+    [currentUser, setExtraMissions]
+  );
+
+  // 내가 추가한 미션 삭제 (완료 기록도 함께 정리)
+  const removeMission = useCallback(
+    (id: string) => {
+      setExtraMissions((prev) => prev.filter((m) => m.id !== id));
+      setMyCompletions((prev) => {
+        if (!(id in prev)) return prev;
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
+    },
+    [setExtraMissions, setMyCompletions]
+  );
 
   const isDone = useCallback(
     (missionId: string, day: number) =>
@@ -166,11 +210,14 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     currentUser,
     currentDay,
     myMissions,
+    extraMissions,
     myCompletions,
     meRecord,
     allMembers,
     login,
     logout,
+    addMission,
+    removeMission,
     isDone,
     setDone,
     advanceDay,
