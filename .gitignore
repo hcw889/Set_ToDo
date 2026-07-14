@@ -7,3 +7,6 @@ build/
 npm-debug.log*
 .DS_Store
 .vite/
+
+# 로컬 전용 문서 (기획서·회고록·분석 등) — 공유 X
+docs/
